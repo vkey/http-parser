@@ -114,9 +114,11 @@ class HttpParser
             if (isset($parts[1])) {
                 $fieldList[$parts[0]] = $parts[1];
             } else {
-                $header = preg_split('/ /', $headerLine);
-                if (count($header) != 3) {
-                    throw new HttpParserBadFormatException();
+                if(empty($header)){
+                    $header = explode(' ',$headerLine);
+                    if (count($header) != 3) {
+                        throw new HttpParserBadFormatException();
+                    }
                 }
             }
         }
@@ -136,6 +138,7 @@ class HttpParser
         else if (strpos($line, ':') !== false) {
             $parts = explode(':', $line);
         }
+        if(strpos($parts[0], ' ') !== false) return array();
         return $parts;
     }
 
